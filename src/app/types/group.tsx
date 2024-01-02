@@ -2,6 +2,6 @@ export type GroupItem = {
     id:number,
     name: string,
     description?:string,
-    picture? : string,
+    type : string,
     members: string[]
 }

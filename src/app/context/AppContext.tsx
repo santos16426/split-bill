@@ -7,9 +7,8 @@ type AppContextProps = {
         setSettings: React.Dispatch<React.SetStateAction<SettingsItem>>;
     },
     groupContext:{
-        groups?:GroupItem,
+        groups?:GroupItem[],
         setGroup: React.Dispatch<React.SetStateAction<GroupItem[]>>;
-
     }
 }
 
@@ -21,11 +20,11 @@ type AppProviderProps = {
 
 export const AppProvider:React.FC<AppProviderProps> = ({children}) => {
     const [settings, setSettings] = useState<SettingsItem>({
-        currency: 'PHP'
+        currency: '₱'
     });
-    const [group, setGroup] = useState<GroupItem[]>([]);
+    const [groups, setGroup] = useState<GroupItem[]|[]>([]);
     const groupContext = {
-        group,
+        groups,
         setGroup
     }
     const settingsContext = {
