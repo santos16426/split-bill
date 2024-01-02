@@ -1,12 +1,15 @@
 import { Plus } from "lucide-react"
 import { useAppContext } from "../context/AppContext"
 import AddGroupModal from "./AddGroup";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 const Group:React.FC = () => {
     const {groupContext} = useAppContext();
+    const [domLoad, setDomLoad] = useState<Boolean>(false)
     useEffect(()=>{
-        console.log(groupContext)
-    },[groupContext])
+        setDomLoad(true)
+    },[])
+    if(!domLoad) return <></>
     return(
         <div className="bg-white bg-opacity-30 w-full p-5 rounded-lg shadow-md flex flex-row gap-5">
             <AddGroupModal triggerNode={
@@ -20,6 +23,7 @@ const Group:React.FC = () => {
             {groupContext.groups && groupContext.groups?.length > 0 && groupContext.groups.map((group, index) => {
                 return(
                     <div key={index} className="flex flex-col justify-center">
+                        <Link href={`/bill/${group.id}`}>
                         <button 
                             style={{
                                 backgroundImage: 
@@ -31,7 +35,8 @@ const Group:React.FC = () => {
                             }}
                             className="flex flex-col justify-center items-center text-black border-2 border-teal-600 rounded-full p-2 w-28 h-28 bg-muted shadow-lg"
                         />
-                        <p className="text-center text-sm">{group.members}</p>
+                        <p className="text-center text-sm">{group.name}</p>
+                        </Link>
                     </div>
                 )
             })}

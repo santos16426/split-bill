@@ -1,17 +1,16 @@
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from "@/app/components/ui/dialog"
 import { Input } from "@/app/components/ui/input"
 import { Separator } from "./ui/separator"
 import { GroupItem } from "../types/group"
 import { useState } from "react"
-import { PlusCircle, Save, Trash2 } from "lucide-react"
+import { Trash2 } from "lucide-react"
 import { DialogClose } from "@radix-ui/react-dialog"
 import { useAppContext } from "../context/AppContext"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
@@ -19,15 +18,15 @@ type AddGroupModalProps = {
     triggerNode: React.ReactNode | string
 }
 const AddGroupModal:React.FC<AddGroupModalProps> = ({triggerNode}) => {
+    const {groupContext} = useAppContext();
     const [tempGroup, setTempGroup] = useState<GroupItem>({
-        id: 0,
+        id: groupContext.groups?.length || 1,
         name:'',
         type:'couple',
         members: [],
     });
-    const {groupContext} = useAppContext();
     const [memberName, setMemberName] = useState<string>('');
-    const handleChange = (key:string,value:number|string|boolean):void =>{
+    const handleChange = (key:string,value:number|string):void =>{
         setTempGroup((prevGroup) =>{
             if(prevGroup === null) return prevGroup
             return {
@@ -58,12 +57,13 @@ const AddGroupModal:React.FC<AddGroupModalProps> = ({triggerNode}) => {
     }
     const handleSave = () =>{
         groupContext.setGroup(prevGroups=>{
+            sessionStorage.setItem('groups', JSON.stringify([...prevGroups,tempGroup]))
             return [...prevGroups,tempGroup]
         })
     }
     return (
         <Dialog onOpenChange={()=>setTempGroup({
-            id: 0,
+            id: groupContext.groups?.length || 1,
             name:'',
             type:'couple',
             members: [],

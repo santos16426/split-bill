@@ -22,7 +22,14 @@ export const AppProvider:React.FC<AppProviderProps> = ({children}) => {
     const [settings, setSettings] = useState<SettingsItem>({
         currency: '₱'
     });
-    const [groups, setGroup] = useState<GroupItem[]|[]>([]);
+    const [groups, setGroup] = useState<GroupItem[]|[]>(()=>{
+        let value:GroupItem[] = [];
+        if(typeof window !== 'undefined'){
+            const sessionSaved = sessionStorage.getItem('groups');
+            if(sessionSaved !== null) value = JSON.parse(sessionSaved)
+        }
+        return value;
+    });
     const groupContext = {
         groups,
         setGroup

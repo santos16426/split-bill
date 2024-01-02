@@ -9,8 +9,6 @@ const App = () => {
   const {settingsContext} = useAppContext();
   return (
       <div className={cn('flex flex-col')}>
-        <Group/>
-        <div className='mt-10'/>
         <Dashboard/>
       </div>
   );

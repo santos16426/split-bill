@@ -12,6 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/app/components/ui/select"
+import Group from './Group';
   
 const quicksand = Quicksand({ subsets: ['latin'] });
 
@@ -29,9 +30,10 @@ const Layout:React.FC<LayoutProps> = ({ children }) => {
             <main className='relative flex flex-col min-h-screen'>
                 <div className='absolute z-99 w-full h-20 flex flex-row justify-around px-20 py-5 bg-teal-300 items-center'>
                     <div className='flex flow-row gap-2 items-center text-black cursor-pointer'>
-                        <p className='text-3xl font-bold'>Split Bill</p><div>
-                        <Coins />
-                    </div>
+                        <p className='text-3xl font-bold'>Split Bill</p>
+                        <div>
+                            <Coins />
+                        </div>
                     </div>
                     <div/>
                     <div className='flex flex-row gap-5 text-black items-center font-bold'>
@@ -51,7 +53,12 @@ const Layout:React.FC<LayoutProps> = ({ children }) => {
                 </div>
                 <div className='flex-grow flex-1 flex flex-row relative'>
                     <div className='w-1/4 h-full'></div>
-                    <div className='w-full pt-24 px-5 h-screen'>{children}</div>
+                    <div className='w-full pt-24 px-5 h-screen'>
+                        <div className='mb-5'>
+                            <Group/>
+                        </div>
+                        {children}
+                    </div>
                     <div className='w-1/4 h-full'></div>
                     <div className='absolute bottom-0 w-full flex flex-row justify-center items-center text-black text-xs'>Copyright 2024 Billy Joe Santos</div>
                 </div>
