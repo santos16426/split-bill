@@ -5,5 +5,5 @@ export type GroupItem = {
   name: string;
   description?: string;
   type: string;
-  members: Member[];
+  members: Member[] | [];
 };

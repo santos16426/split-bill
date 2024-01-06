@@ -20,14 +20,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { Member } from "../types/member";
 const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
   const { groupContext } = useAppContext();
-  const [tempGroup, setTempGroup] = useState<GroupItem>({
-    id: groupContext.groups?.length || 1,
-    name: "",
-    type: "couple",
-    members: [],
-  });
+  const [tempGroup, setTempGroup] = useState<GroupItem | null>(null);
   const [memberName, setMemberName] = useState<string>("");
   const handleChange = (key: string, value: number | string): void => {
     setTempGroup((prevGroup) => {
@@ -39,12 +35,12 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
     });
   };
   const handleAddMember = () => {
-    if (memberName === "") return;
-    setTempGroup((prevGroup) => {
-      if (prevGroup === null) return prevGroup;
+    if (!memberName) return;
+    setTempGroup((prevGroup: GroupItem | null) => {
+      if (!prevGroup) return prevGroup;
       return {
         ...prevGroup,
-        members: [memberName, ...prevGroup.members],
+        members: [{ name: memberName }, ...prevGroup.members],
       };
     });
     setMemberName("");
@@ -54,18 +50,20 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
       if (prevGroup === null) return prevGroup;
       return {
         ...prevGroup,
-        members: prevGroup.members.filter((_, i) => i !== index),
+        members: prevGroup.members.filter((_: Member, i: number) => i !== index),
       };
     });
   };
   const handleSave = () => {
-    groupContext.setGroup((prevGroups) => {
-      sessionStorage.setItem(
-        "groups",
-        JSON.stringify([...prevGroups, tempGroup]),
-      );
-      return [...prevGroups, tempGroup];
-    });
+    if (tempGroup) {
+      groupContext.setGroup((prevGroups: GroupItem[]) => {
+        sessionStorage.setItem(
+          "groups",
+          JSON.stringify([...prevGroups, tempGroup]),
+        );
+        return [...prevGroups, tempGroup];
+      });
+    }
   };
   return (
     <Dialog
@@ -113,7 +111,7 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
         <div className='flex flex-col font-semibold text-xs'>
           <p className='mb-2'>Type</p>
           <Select
-            value={tempGroup.type}
+            value={tempGroup?.type}
             onValueChange={(e: string): void => handleChange("type", e)}
           >
             <SelectTrigger className='w-[100%] text-black'>
@@ -155,21 +153,25 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
           </div>
         </div>
         <>
-          <div className='flex flex-col gap-2'>
-            {tempGroup?.members.length > 0 ? (
-              tempGroup.members.map((member, index) => (
-                <div
-                  key={index}
-                  className='flex flex-row justify-between bg-white bg-opacity-20 hover:bg-opacity-30 text-black font-bold p-2 rounded-lg'
-                >
-                  <p>{member}</p>
-                  <button
-                    className='bg-red-600 rounded-md text-white p-1 hover:bg-opacity-60'
-                    onClick={() => handleRemoveMember(index)}
+          <div className='flex flex-col gap-1'>
+            {tempGroup && tempGroup?.members.length > 0 ? (
+              tempGroup.members.map((member: Member, index: number) => (
+                <>
+                  <div
+                    key={index}
+                    className='flex flex-row justify-between hover:bg-white hover:bg-opacity-90 hover:text-black text-white font-bold p-2 rounded-lg'
                   >
-                    <Trash2 size={15} />
-                  </button>
-                </div>
+                    <p>{member.name}</p>
+                    <button
+                      className='bg-red-600 rounded-md text-white p-1 hover:bg-opacity-60'
+                      onClick={() => handleRemoveMember(index)}
+                    >
+                      <Trash2 size={15} />
+                    </button>
+
+                  </div>
+                  <Separator />
+                </>
               ))
             ) : (
               <p className='text-xs text-white text-center'>
@@ -178,7 +180,6 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
             )}
           </div>
         </>
-        <Separator />
         <div className='flex flex-row justify-between'>
           <DialogClose asChild>
             <button
@@ -190,7 +191,7 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
           </DialogClose>
           <DialogClose>
             <button
-              disabled={tempGroup.name === "" || tempGroup.members.length === 0}
+              disabled={tempGroup?.name === "" || tempGroup?.members.length === 0}
               type='button'
               onClick={handleSave}
               className='flex flex-row gap-2 bg-blue-600 hover:bg-opacity-70 text-white py-2 px-4 rounded-md transition duration-300 justify-center items-center disabled:cursor-not-allowed disabled:bg-opacity-100'

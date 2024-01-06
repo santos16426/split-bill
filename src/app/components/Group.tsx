@@ -1,46 +1,50 @@
-import { Plus } from "lucide-react"
+import { Plus, Trash2 } from "lucide-react"
 import { useAppContext } from "../context/AppContext"
 import AddGroupModal from "./AddGroup";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-const Group:React.FC = () => {
-    const {groupContext} = useAppContext();
-    const [domLoad, setDomLoad] = useState<Boolean>(false)
-    useEffect(()=>{
-        setDomLoad(true)
-    },[])
-    if(!domLoad) return <></>
-    return(
-        <div className="bg-white bg-opacity-30 w-full p-5 rounded-lg shadow-md flex flex-row gap-5">
+import { Separator } from "./ui/separator";
+import { cn } from "../lib/utils";
+
+const Group: React.FC = () => {
+    const { groupContext, activeGroupContext } = useAppContext();
+    const { activeGroup, setActiveGroup } = activeGroupContext;
+    if (!(groupContext && groupContext.groups && groupContext.groups.length > 0)) return (
+        <div className="py-10 text-white px-3">
+            <p className="text-lg font-semibold mb-2">No groups yet</p>
+            <p className="text-sm">
+                Start managing shared expenses by creating a new group. Click the button
+                below to get started!
+            </p>
             <AddGroupModal triggerNode={
-                <div className="flex flex-col justify-center">
-                    <button className="flex flex-col justify-center items-center text-black border-2 border-teal-600 rounded-full p-2 w-28 h-28 bg-muted shadow-lg">
-                        <Plus size={50}/>
+                <button className="mt-4 bg-teal-600 text-white px-3 py-2 text-xs">
+                    Add new group
+                </button>
+            } />
+
+        </div>
+    )
+    return (
+        <div className='flex flex-col gap-3'>
+            <div className='flex-row flex justify-between items-center'>
+                <p className='text-white font-bold'>Groups</p>
+                <AddGroupModal triggerNode={
+                    <button className="w-fill px-3 py-2 bg-white bg-opacity-20 rounded-md shadow-md flex flex-row justify-center items-center text-white">
+                        <Plus />
                     </button>
-                    <p className="text-center text-sm">Add Group</p>
-                </div>
-            }/>
-            {groupContext.groups && groupContext.groups?.length > 0 && groupContext.groups.map((group, index) => {
-                return(
-                    <div key={index} className="flex flex-col justify-center">
-                        <Link href={`/bill/${group.id}`}>
-                        <button 
-                            style={{
-                                backgroundImage: 
-                                `url(${group.type === 'group'? 'https://imgs.search.brave.com/6nkKkT1M33qblN9jtKoGsqrvqvTBamyxbCKqFAHXBks/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9jZG4u/cGl4YWJheS5jb20v/cGhvdG8vMjAxNy8x/MS8xMC8wNS80Ni9n/cm91cC0yOTM1NTIx/XzY0MC5wbmc'
-                                :group.type === 'home' ? 'https://cdn.pixabay.com/photo/2015/12/28/02/58/home-1110868_1280.png' : 'https://media.istockphoto.com/id/1457584769/vector/romantic-man-and-woman-with-tattoo-in-form-of-half-heart-on-hands-symbolizing-love-vector.jpg?s=612x612&w=0&k=20&c=gTkMx1EDjeBJ4vPS8sbVdRtXSZeE3N6Vhvo9HMWHLvc='
-                                })`,
-                                backgroundSize:'cover',
-                                backgroundPosition:'center'
-                            }}
-                            className="flex flex-col justify-center items-center text-black border-2 border-teal-600 rounded-full p-2 w-28 h-28 bg-muted shadow-lg"
-                        />
-                        <p className="text-center text-sm">{group.name}</p>
-                        </Link>
+                } />
+            </div>
+            <Separator className='bg-white' />
+            {groupContext.groups.map((group, index) => {
+                return (
+                    <div className={cn('hover:bg-slate-500 hover:p-1 hover:font-bold flex flex-row justify-between text-white cursor-pointer',
+                        group.id === activeGroup?.id && 'bg-slate-500 p-1 font-bold'
+                    )} key={index}
+                        onClick={() => setActiveGroup(group)}
+                    >
+                        {group.name}
                     </div>
                 )
             })}
-        </div>
+        </div >
     )
 }
 export default Group
