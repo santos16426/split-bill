@@ -1,52 +1,62 @@
-import { createContext, useContext, useState } from "react";
-import {SettingsItem} from '@/app/types/settings' 
-import {GroupItem} from '@/app/types/group'
+import { createContext, useContext, useEffect, useState } from "react";
+import { SettingsItem } from '@/app/types/settings'
+import { GroupItem } from '@/app/types/group'
 type AppContextProps = {
-    settingsContext:{
+    settingsContext: {
         settings: SettingsItem,
         setSettings: React.Dispatch<React.SetStateAction<SettingsItem>>;
     },
-    groupContext:{
-        groups?:GroupItem[],
+    groupContext: {
+        groups?: GroupItem[],
         setGroup: React.Dispatch<React.SetStateAction<GroupItem[]>>;
+    }
+    activeGroupContext: {
+        activeGroup?: GroupItem | null,
+        setActiveGroup: React.Dispatch<React.SetStateAction<GroupItem | null>>;
     }
 }
 
-const AppContext = createContext<AppContextProps|undefined>(undefined);
+const AppContext = createContext<AppContextProps | undefined>(undefined);
 
 type AppProviderProps = {
     children: React.ReactNode;
 }
 
-export const AppProvider:React.FC<AppProviderProps> = ({children}) => {
+export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     const [settings, setSettings] = useState<SettingsItem>({
         currency: '₱'
     });
-    const [groups, setGroup] = useState<GroupItem[]|[]>(()=>{
-        let value:GroupItem[] = [];
-        if(typeof window !== 'undefined'){
+    const [groups, setGroup] = useState<GroupItem[]>([]);
+    const [activeGroup, setActiveGroup] = useState<GroupItem | null>(null)
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
             const sessionSaved = sessionStorage.getItem('groups');
-            if(sessionSaved !== null) value = JSON.parse(sessionSaved)
+            if (sessionSaved !== null) {
+                setGroup(JSON.parse(sessionSaved));
+            }
         }
-        return value;
-    });
+    }, [])
     const groupContext = {
         groups,
         setGroup
+    }
+    const activeGroupContext = {
+        activeGroup,
+        setActiveGroup
     }
     const settingsContext = {
         settings,
         setSettings
     }
-    return(
-        <AppContext.Provider value={{settingsContext, groupContext}}>
+    return (
+        <AppContext.Provider value={{ settingsContext, groupContext, activeGroupContext }}>
             {children}
         </AppContext.Provider>
     )
 }
 export const useAppContext = () => {
     const context = useContext(AppContext);
-    if(!context){
+    if (!context) {
         throw new Error('useAppContext must be within an AppProvider')
     }
     return context
