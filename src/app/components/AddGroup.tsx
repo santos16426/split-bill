@@ -125,7 +125,7 @@ const AddGroupModal:React.FC<AddGroupModalProps> = ({triggerNode}) => {
                     {tempGroup?.members.length> 0 ?
                         tempGroup.members.map((member,index)=>
                         <div key={index} className="flex flex-row justify-between bg-white bg-opacity-20 hover:bg-opacity-30 text-black font-bold p-2 rounded-lg">
-                            <p>{member}</p>
+                            <p className="text-white">{member}</p>
                             <button className='bg-red-600 rounded-md text-white p-1 hover:bg-opacity-60' onClick={()=>handleRemoveMember(index)}>
                                 <Trash2 size={15}/>
                             </button>
