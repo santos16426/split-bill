@@ -18,9 +18,34 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-
+import { Button } from "@/app/components/ui/button"
+import { Calendar } from "@/app/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/app/components/ui/popover"
+import { cn } from "../lib/utils";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
 const AddExpenseModal: React.FC<ModalProps> = ({ triggerNode }) => {
-  const [expenseForm, setExpenseForm] = useState<ExpenseItem>();
+  const [expenseForm, setExpenseForm] = useState<ExpenseItem | null>(null);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const handleChange = (key: string, value: any) => {
+    setExpenseForm((prevForm: ExpenseItem | null) => {
+      const updatedForm: ExpenseItem = {
+        ...prevForm,
+        [key]: value,
+      };
+      return updatedForm;
+    });
+  };
+
+  const handleSave = () => {
+    console.log("Expense Form:", expenseForm);
+    // Add your logic for saving the expense data
+    // Close the modal or perform other actions as needed
+  };
 
   return (
     <Dialog>
@@ -37,36 +62,89 @@ const AddExpenseModal: React.FC<ModalProps> = ({ triggerNode }) => {
           <p className='mb-2'>
             Name<span className='text-red-600'>*</span>
           </p>
-          <Input className='text-black' placeholder='Enter group name' />
+          <Input
+            className='text-primary'
+            placeholder='Enter expense name'
+            value={expenseForm?.name}
+            onChange={(e) => handleChange("name", e.target.value)}
+          />
         </div>
         <div className='flex flex-col font-semibold text-xs'>
           <p className='mb-2'>Description</p>
           <textarea
-            placeholder='Short description about your group'
+            placeholder='Short description about the expense'
+            value={expenseForm?.description}
+            onChange={(e) => handleChange("description", e.target.value)}
             className='text-black flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50'
           />
         </div>
         <div className='flex flex-col font-semibold text-xs'>
-          <p className='mb-2'>Type</p>
-          <Select
-          // value={tempGroup.type}
-          // onValueChange={(e: string): void => handleChange("type", e)}
-          >
-            <SelectTrigger className='w-[100%] text-black'>
-              <SelectValue
-                placeholder='What kind of group'
-                className='text-black'
+          <p className='mb-2'>Date</p>
+          <Popover open={isPopoverOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                onClick={() => setIsPopoverOpen(!isPopoverOpen)}
+                variant={"outline"}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !expenseForm?.date && "text-muted-foreground"
+                )}
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {expenseForm?.date ? format(expenseForm?.date, "PPP") : <span>Pick a date</span>}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={expenseForm?.date as Date | undefined}
+                onSelect={(date) => {
+                  handleChange('date', date)
+                  setIsPopoverOpen(false)
+                }
+                }
+                initialFocus
               />
+            </PopoverContent>
+          </Popover>
+        </div>
+        <div className='flex flex-col font-semibold text-xs'>
+          <p className='mb-2'>Total</p>
+          <Input
+            type='number'
+            className='text-primary'
+            placeholder='Enter total amount'
+            value={expenseForm?.totalAmount}
+            onChange={(e) => handleChange("total", parseFloat(e.target.value))}
+          />
+        </div>
+
+        <div className='flex flex-col font-semibold text-xs'>
+          <p className='mb-2'>Paid By</p>
+          {/* Include your multi-select component for paidBy here */}
+        </div>
+        <div className='flex flex-col font-semibold text-xs'>
+          <p className='mb-2'>Who Will Pay</p>
+          {/* Include your multi-select component for whoWillPay here */}
+        </div>
+        <div className='flex flex-col font-semibold text-xs'>
+          <p className='mb-2'>Split</p>
+          <Select
+            value={expenseForm?.type}
+            onValueChange={(e: string) => handleChange("dropdown", e)}
+          >
+            <SelectTrigger className='w-[100%] text-primary'>
+              <SelectValue placeholder='Select type' />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem className='font-bold text-black' value='couple'>
-                Couple
+              <SelectItem className='font-bold text-primary' value='splitAll'>
+                Equally
               </SelectItem>
-              <SelectItem className='font-bold text-black' value='group'>
-                Group
+              <SelectItem className='font-bold text-primary' value='splitAmong'>
+                Split among selected members
               </SelectItem>
-              <SelectItem className='font-bold text-black' value='home'>
-                Home
+              <SelectItem className='font-bold text-primary' value='payAmount'>
+                Pay full amount
               </SelectItem>
             </SelectContent>
           </Select>
@@ -81,16 +159,15 @@ const AddExpenseModal: React.FC<ModalProps> = ({ triggerNode }) => {
               Close
             </button>
           </DialogClose>
-          <DialogClose>
-            <button
-              //   disabled={tempGroup.name === "" || tempGroup.members.length === 0}
-              type='button'
-              //   onClick={handleSave}
-              className='flex flex-row gap-2 bg-blue-600 hover:bg-opacity-70 text-white py-2 px-4 rounded-md transition duration-300 justify-center items-center disabled:cursor-not-allowed disabled:bg-opacity-100'
-            >
-              Save
-            </button>
-          </DialogClose>
+          {/* <DialogClose> */}
+          <button
+            type='button'
+            onClick={handleSave}
+            className='flex flex-row gap-2 bg-blue-600 hover:bg-opacity-70 text-white py-2 px-4 rounded-md transition duration-300 justify-center items-center'
+          >
+            Save
+          </button>
+          {/* </DialogClose> */}
         </div>
       </DialogContent>
     </Dialog>

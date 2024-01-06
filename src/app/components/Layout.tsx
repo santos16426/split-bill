@@ -31,7 +31,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div className='flex-grow flex-1 flex flex-col relative'>
                     <div className='absolute z-99 w-full h-20 flex flex-row justify-between px-32 py-5 bg-secondary items-center'>
                         <Link href="/">
-                            <div className='flex flow-row gap-2 items-center text-black cursor-pointer'>
+                            <div className='flex flow-row gap-2 items-center text-primary cursor-pointer'>
                                 <p className='text-3xl font-bold text-primary'>Split Bill</p>
                                 <div className='text-primary'>
                                     <Coins />
@@ -39,7 +39,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                             </div>
                         </Link>
                         <div />
-                        <div className='flex flex-row gap-5 text-black items-center font-bold'>
+                        <div className='flex flex-row gap-5 text-primary items-center font-bold'>
                             <Select
                                 value={settingsContext.settings.currency}
                                 onValueChange={(e: string): void => settingsContext.setSettings({ currency: e })}
@@ -59,7 +59,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         {children}
                     </div>
 
-                    <div className='absolute bottom-0 w-full flex flex-row justify-center items-center text-primary text-xs'>Copyright 2024 Billy Joe Santos</div>
+                    <div className='absolute bottom-0 w-full flex flex-row justify-center items-center text-xs'>Copyright 2024 Billy Joe Santos</div>
                 </div>
             </main>
 
