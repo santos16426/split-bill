@@ -40,7 +40,7 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
       if (!prevGroup) return prevGroup;
       return {
         ...prevGroup,
-        members: [{ name: memberName }, ...prevGroup.members],
+        members: [{ name: memberName, id: prevGroup.members.length + 1 }, ...prevGroup.members],
       };
     });
     setMemberName("");
@@ -69,7 +69,7 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
     <Dialog
       onOpenChange={() =>
         setTempGroup({
-          id: groupContext.groups?.length || 1,
+          id: groupContext && groupContext.groups && (groupContext?.groups?.length + 1) || 1,
           name: "",
           type: "couple",
           members: [],
@@ -77,11 +77,11 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
       }
     >
       <DialogTrigger asChild>{triggerNode}</DialogTrigger>
-      <DialogContent className='w-[500px] bg-slate-800 text-white border-0'>
+      <DialogContent className='w-[500px] bg-secondary text-primary border-0'>
         <DialogHeader>
           <DialogTitle>Add New Group</DialogTitle>
           <DialogDescription>
-            <p className='text-white'>
+            <p className='text-primary-muted'>
               Effortlessly create a new group by providing a name and selecting
               members. Start managing shared expenses with ease
             </p>
@@ -145,7 +145,7 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
               onChange={(e) => setMemberName(e.target.value)}
             />
             <button
-              className='px-2 bg-blue-600 rounded-md text-white p-1 hover:bg-opacity-60'
+              className='px-2 bg-blue-600 rounded-md text-secondary p-1 hover:bg-opacity-60'
               onClick={handleAddMember}
             >
               Add
@@ -159,11 +159,11 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
                 <>
                   <div
                     key={index}
-                    className='flex flex-row justify-between hover:bg-white hover:bg-opacity-90 hover:text-black text-white font-bold p-2 rounded-lg'
+                    className='flex flex-row justify-between hover:bg-slate-400 hover:bg-opacity-30 hover:text-black text-primary font-bold p-2 rounded-lg'
                   >
                     <p>{member.name}</p>
                     <button
-                      className='bg-red-600 rounded-md text-white p-1 hover:bg-opacity-60'
+                      className='bg-red-600 rounded-md text-secondary p-1 hover:bg-opacity-60'
                       onClick={() => handleRemoveMember(index)}
                     >
                       <Trash2 size={15} />
@@ -174,7 +174,7 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
                 </>
               ))
             ) : (
-              <p className='text-xs text-white text-center'>
+              <p className='text-xs text-primary text-center'>
                 No members yet...
               </p>
             )}
@@ -194,7 +194,7 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
               disabled={tempGroup?.name === "" || tempGroup?.members.length === 0}
               type='button'
               onClick={handleSave}
-              className='flex flex-row gap-2 bg-blue-600 hover:bg-opacity-70 text-white py-2 px-4 rounded-md transition duration-300 justify-center items-center disabled:cursor-not-allowed disabled:bg-opacity-100'
+              className='flex flex-row gap-2 bg-blue-600 hover:bg-opacity-70 text-secondary py-2 px-4 rounded-md transition duration-300 justify-center items-center disabled:cursor-not-allowed disabled:bg-opacity-100'
             >
               Save
             </button>

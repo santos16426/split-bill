@@ -25,11 +25,11 @@ const AddExpenseModal: React.FC<ModalProps> = ({ triggerNode }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>{triggerNode}</DialogTrigger>
-      <DialogContent className='w-[500px] bg-slate-800 text-white border-0'>
+      <DialogContent className='w-[500px] bg-secondary text-primary border-0'>
         <DialogHeader>
           <DialogTitle>Add Expense</DialogTitle>
           <DialogDescription>
-            <p className='text-white'></p>
+            <p className='text-primary-muted'></p>
           </DialogDescription>
         </DialogHeader>
         <Separator />

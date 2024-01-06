@@ -29,11 +29,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </Head>
             <main className='relative flex flex-col min-h-screen'>
                 <div className='flex-grow flex-1 flex flex-col relative'>
-                    <div className='absolute z-99 w-full h-20 flex flex-row justify-between px-32 py-5 bg-white bg-opacity-10 items-center'>
+                    <div className='absolute z-99 w-full h-20 flex flex-row justify-between px-32 py-5 bg-secondary items-center'>
                         <Link href="/">
                             <div className='flex flow-row gap-2 items-center text-black cursor-pointer'>
-                                <p className='text-3xl font-bold text-teal-400'>Split Bill</p>
-                                <div className='text-teal-400'>
+                                <p className='text-3xl font-bold text-primary'>Split Bill</p>
+                                <div className='text-primary'>
                                     <Coins />
                                 </div>
                             </div>
@@ -59,7 +59,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         {children}
                     </div>
 
-                    <div className='absolute bottom-0 w-full flex flex-row justify-center items-center text-white text-xs'>Copyright 2024 Billy Joe Santos</div>
+                    <div className='absolute bottom-0 w-full flex flex-row justify-center items-center text-primary text-xs'>Copyright 2024 Billy Joe Santos</div>
                 </div>
             </main>
 

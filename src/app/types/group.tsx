@@ -1,3 +1,4 @@
+import { ExpenseItem } from "./expenseItem";
 import { Member } from "./member";
 
 export type GroupItem = {
@@ -6,4 +7,5 @@ export type GroupItem = {
   description?: string;
   type: string;
   members: Member[] | [];
+  expenses?: ExpenseItem[] | []
 };
