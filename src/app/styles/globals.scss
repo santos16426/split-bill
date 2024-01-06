@@ -66,8 +66,8 @@
   }
 }
  
-$color1: #d3f5cf;
-$color2: #a8dbfa;
+$color1: #000428;
+$color2: #004e92;
 $color3: #635ee2;
 @layer base {
   * {
@@ -79,7 +79,7 @@ $color3: #635ee2;
     font-family: Quicksand;
   }
   body {
-    background: linear-gradient(to right, $color1, $color2, $color3);
+    background: linear-gradient(to right, $color1, $color2,);
     background-size: cover;    
   }
 }
