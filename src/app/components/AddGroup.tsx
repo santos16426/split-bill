@@ -90,7 +90,7 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
         <Separator />
         <div className='flex flex-col font-semibold text-xs'>
           <p className='mb-2'>
-            Name<span className='text-red-600'>*</span>
+            Name
           </p>
           <Input
             className='text-black'
@@ -100,7 +100,7 @@ const AddGroupModal: React.FC<ModalProps> = ({ triggerNode }) => {
           />
         </div>
         <div className='flex flex-col font-semibold text-xs'>
-          <p className='mb-2'>Description</p>
+          <p className='mb-2 items-center flex flex-row gap-1'>Description <span className='text-gray-400 text-[.6rem]'>{`(Optional)`}</span></p>
           <textarea
             placeholder='Short description about your group'
             value={tempGroup?.description}

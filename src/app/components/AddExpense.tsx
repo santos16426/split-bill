@@ -28,9 +28,45 @@ import {
 import { cn } from "../lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
+import MultipleSelect, { SelectOption } from "./ui/multipleSelect";
 const AddExpenseModal: React.FC<ModalProps> = ({ triggerNode }) => {
   const [expenseForm, setExpenseForm] = useState<ExpenseItem | null>(null);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const options = [
+    {
+      value: 1,
+      label: 'Option 1'
+    },
+    {
+      value: 2,
+      label: 'Option 2'
+    },
+    {
+      value: 3,
+      label: 'Option 3'
+    },
+    {
+      value: 4,
+      label: 'Option 4'
+    },
+    {
+      value: 5,
+      label: 'Option 5'
+    },
+    {
+      value: 6,
+      label: 'Option 6'
+    },
+    {
+      value: 7,
+      label: 'Option 7'
+    },
+    {
+      value: 8,
+      label: 'Option 8'
+    }
+  ]
+  const [testMultipleValue, setTestMultipleValue] = useState<SelectOption[]>([])
   const handleChange = (key: string, value: any) => {
     setExpenseForm((prevForm: ExpenseItem | null) => {
       const updatedForm: ExpenseItem = {
@@ -122,11 +158,15 @@ const AddExpenseModal: React.FC<ModalProps> = ({ triggerNode }) => {
         <div className='flex flex-col font-semibold text-xs'>
           <p className='mb-2'>Paid By</p>
           {/* Include your multi-select component for paidBy here */}
+          <MultipleSelect
+            // className="w-full"
+            value={testMultipleValue}
+            options={options}
+            onChange={o => setTestMultipleValue(o)}
+
+          />
         </div>
-        <div className='flex flex-col font-semibold text-xs'>
-          <p className='mb-2'>Who Will Pay</p>
-          {/* Include your multi-select component for whoWillPay here */}
-        </div>
+
         <div className='flex flex-col font-semibold text-xs'>
           <p className='mb-2'>Split</p>
           <Select
@@ -148,6 +188,10 @@ const AddExpenseModal: React.FC<ModalProps> = ({ triggerNode }) => {
               </SelectItem>
             </SelectContent>
           </Select>
+        </div>
+        <div className='flex flex-col font-semibold text-xs'>
+          <p className='mb-2'>Who Will Pay</p>
+
         </div>
         <Separator />
         <div className='flex flex-row justify-between'>
